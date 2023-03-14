@@ -1,8 +1,7 @@
 node {
-    environment {
-        ARTIFACTORY_URL = 'https://acndevops.jfrog.io/'
-        ARTIFACTORY_NPM_REPO = 'devops-local'
-        ARTIFACTORY_NPM_SCOPE = '@devops'
+    def server = Artifactory.server('devopsjfrog')
+    def rtNpm = Artifactory.newNpmBuild()
+    def buildInfo = Artifactory.newBuildInfo()
     }
     
     stages {
