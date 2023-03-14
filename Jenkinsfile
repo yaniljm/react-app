@@ -5,8 +5,8 @@ pipeline {
         jfrogCli "jfrog-cli"
     }
     environment {
-        NPM_REGISTRY = "https://acndevops.jfrog.io/artifactory/api/npm/devops-local/"
-        JFROG_CREDS_ID = "jfrog-credentials"
+        NPM_REGISTRY = 'https://acndevops.jfrog.io/artifactory/api/npm/devops-local/'
+        JFROG_CREDS_ID = 'finals-devops'
     }
     
     stages {
@@ -31,9 +31,8 @@ pipeline {
                 }
                 rtNpmPublish(
                     tool: 'jfrog-cli',
-                    deployerId: 'jfrog-instance',
-                    path: 'npm-repo/@mycompany',
-                    npmArgs: '--registry=${env.NPM_REGISTRY}'
+                    deployerId: 'artifactory-server',
+                    path: 'npm-repo/@mycompany'
                 )
             }
         }
