@@ -1,40 +1,43 @@
 pipeline {
     agent any
+    
+    tools {
+        nodejs "node"
+    }
     environment {
-        ARTIFACTORY_URL = 'https://acndevops.jfrog.io/'
-        JFROG_USER = credentials('devops')
-        JFROG_API_KEY = credentials('cmVmdGtuOjAxOjE3MTAyOTc3NjY6TFR0Snp2YXloaW9uOU8zTlh2Z0tGbGRJV2pk')
-        NPM_REGISTRY = "https://my-npm-registry.com"
+        NPM_REGISTRY = "https://acndevops.jfrog.io/artifactory/api/npm/devops-local/"
+        JFROG_INSTANCE = "https://acndevops.jfrog.io/"
+        JFROG_CREDS_ID = 'JFrog'
     }
     
     stages {
-        stage('SCM') {
+        stage('Checkout') {
             steps {
                 git 'https://github.com/yaniljm/react-app.git'
-                checkout scm
-            }
-        }
-        
-        stage('Install dependencies') {
-            steps {
-                bat 'npm install'
-                bat 'npm test'
             }
         }
         
         stage('Build') {
             steps {
+                bat 'npm install'
                 bat 'npm run build'
             }
         }
-        stage('Package and Publish') {
+        
+        stage('Publish') {
             steps {
-                // Set NPM registry to use JFrog
-                bat "npm config set registry ${env.NPM_REGISTRY}"
-                bat "npm config set '//${env.NPM_REGISTRY}/:_authToken' \$(echo -n ${env.JFROG_USER}:${env.JFROG_API_KEY} | base64)"
-                
-                // Publish package to JFrog
-                bat 'npm publish'
+                withCredentials([usernamePassword(credentialsId: env.JFROG_CREDS_ID, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    bat "npm config set registry ${env.NPM_REGISTRY}"
+                    bat "npm login --scope=@mycompany --registry=${env.NPM_REGISTRY} <<EOF\n${USERNAME}\n${PASSWORD}\n${USER_EMAIL}\nEOF"
+                    bat "npm publish --registry=${env.NPM_REGISTRY}"
+                }
+                rtNpmPublish(
+                    tool: 'jfrog-cli',
+                    serverId: 'jfrog-instance',
+                    registry: env.NPM_REGISTRY,
+                    repo: 'npm-repo',
+                    npmArgs: '--scope=@mycompany'
+                )
             }
         }
     }
