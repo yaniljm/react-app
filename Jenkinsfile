@@ -6,8 +6,7 @@ pipeline {
     }
     environment {
         NPM_REGISTRY = "https://acndevops.jfrog.io/artifactory/api/npm/devops-local/"
-        JFROG_INSTANCE = "https://acndevops.jfrog.io/"
-        JFROG_CREDS_ID = 'final-devops'
+        JFROG_CREDS_ID = "jfrog-credentials"
     }
     
     stages {
@@ -27,9 +26,8 @@ pipeline {
         stage('Publish') {
             steps {
                 withCredentials('final-devops') {
-                    bat "npm config set registry ${env.NPM_REGISTRY}"
-                    bat "npm login --scope=@mycompany --registry=${env.NPM_REGISTRY} <<EOF\n${USERNAME}\n${PASSWORD}\n${USER_EMAIL}\nEOF"
-                    bat "npm publish --registry=${env.NPM_REGISTRY}"
+                    bat "npm config set registry https://acndevops.jfrog.io/artifactory/api/npm/devops-local/"
+                    bat "npm publish --registry=https://acndevops.jfrog.io/artifactory/api/npm/devops-local/"
                 }
                 rtNpmPublish(
                     tool: 'jfrog-cli',
