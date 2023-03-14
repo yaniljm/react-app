@@ -1,5 +1,7 @@
 pipeline {
-  agent any
+  agent {
+      label 'devops'
+  }
   
   environment {
     ARTIFACTORY_URL = "https://acndevops.jfrog.io"
