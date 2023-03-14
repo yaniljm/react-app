@@ -8,9 +8,9 @@ pipeline {
     }
     
     stages {
-        stage('Checkout') {
+        stage('SCM') {
             steps {
-                checkout scm
+                git 'https://github.com/yaniljm/react-app.git'
             }
         }
         
