@@ -7,7 +7,7 @@ pipeline {
     ARTIFACTORY_PASSWORD = "ACNDevops.fy23"
     NPMRC_CONTENTS = "registry=$https://acndevops.jfrog.io/artifactory/api/npm/devops-local\n_auth=$devops:$ACNDevops.fy23\nemail=devops@gmail.com"
   }
-  Stages {
+  
     stage('SCM') {
         git 'https://github.com/yaniljm/react-app.git'
         bat 'npm install'
@@ -20,5 +20,5 @@ pipeline {
       bat 'npm pack'
       bat 'jfrog rt npm-publish --npm-auth .npmrc --build-name my-package --build-number 1.0.0 .tgz'
     }
-  }
+  
 }
