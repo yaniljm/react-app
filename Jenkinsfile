@@ -22,8 +22,7 @@ pipeline {
     } 
     stage("Publish") {
       steps {
-        bat 'npm pack'
-        bat 'jfrog rt npm-publish --npm-auth .npmrc --build-name my-package --build-number 1.0.0 .tgz'
+        bat 'jfrog rt upload --url https://acndevops.jfrog.io/articatory/ --access-token ${ARTIFACTORY_CRED} target/demo-0.0.1-SNAPSHOT.jar devops-local/'
       }
     }
   }
