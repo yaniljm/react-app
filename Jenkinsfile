@@ -2,10 +2,9 @@ pipeline {
   agent any
   
   environment {
+    CI = true
     ARTIFACTORY_URL = "https://acndevops.jfrog.io"
-    ARTIFACTORY_USER = "devops"
-    ARTIFACTORY_PASSWORD = "ACNDevops.fy23"
-    NPMRC_CONTENTS = "registry=$https://acndevops.jfrog.io/artifactory/api/npm/devops-local\n_auth=$devops:$ACNDevops.fy23\nemail=devops@gmail.com"
+    ARTIFACTORY_CRED = credentials('artifactory-token)
   }
   
   stages {
