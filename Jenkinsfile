@@ -1,6 +1,7 @@
 node {
     def server = Artifactory.server 'artifactory-server'
     def rtNpm = Artifactory.newNpmBuild()
+    def buildInfo = Artifactory.newBuildInfo()
 
     environment {
         ARTIFACTORY_URL = 'https://acndevops.jfrog.io/'
@@ -9,7 +10,7 @@ node {
     }
     
     stages {
-        stage('SCM') {
+        stage'SCM' {
             steps {
                 git 'https://github.com/yaniljm/react-app.git'
             }
