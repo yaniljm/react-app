@@ -14,9 +14,7 @@ node {
             buildInfo.env.capture = true
             buildInfo.env.filter.addInclude("*")
         }
-        stage('Install dependencies') {
-            steps {
-                bat 'npm install'
-            }
-
+        stage'Install dependencies'
+            bat 'npm install'
+        
 }
