@@ -9,8 +9,7 @@ node {
         ARTIFACTORY_NPM_SCOPE = '@devops'
     }
     
-    stages {
-        stage'SCM' {
+    stage'SCM' {
             steps {
                 git 'https://github.com/yaniljm/react-app.git'
             }
