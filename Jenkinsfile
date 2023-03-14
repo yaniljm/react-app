@@ -1,22 +1,24 @@
 pipeline {
     agent any
-    
     environment {
         ARTIFACTORY_URL = 'https://acndevops.jfrog.io/'
-        ARTIFACTORY_NPM_REPO = 'devops-local'
-        ARTIFACTORY_NPM_SCOPE = '@devops'
+        JFROG_USER = credentials('devops')
+        JFROG_API_KEY = credentials('cmVmdGtuOjAxOjE3MTAyOTc3NjY6TFR0Snp2YXloaW9uOU8zTlh2Z0tGbGRJV2pk')
+        NPM_REGISTRY = "https://my-npm-registry.com"
     }
     
     stages {
         stage('SCM') {
             steps {
                 git 'https://github.com/yaniljm/react-app.git'
+                checkout scm
             }
         }
         
         stage('Install dependencies') {
             steps {
                 bat 'npm install'
+                bat 'npm test'
             }
         }
         
@@ -25,19 +27,14 @@ pipeline {
                 bat 'npm run build'
             }
         }
-        
-        stage('Publish') {
+        stage('Package and Publish') {
             steps {
-                script {
-                    def buildInfo = rtBuildInfo()
-                    
-                    rtNpmSetRegistry(registry: "${https://acndevops.jfrog.io}/${devops-local}")
-                    rtNpmAuth(authParams: [username: "${devops", password: "$cmVmdGtuOjAxOjE3MTAyOTc3NjY6TFR0Snp2YXloaW9uOU8zTlh2Z0tGbGRJV2pk", email: 'devops@gmail.com'])
-                    bat "npm publish ${devops} --registry=${https://acndevops.jfrog.io}/${devops-local}"
-                    
-                    buildInfo.appendBuildInfo(env.JOB_NAME, env.BUILD_NUMBER, env.GIT_COMMIT, 'npm')
-                    rtPublishBuildInfo serverId: 'Artifactory', buildInfo: buildInfo
-                }
+                // Set NPM registry to use JFrog
+                bat "npm config set registry ${env.NPM_REGISTRY}"
+                bat "npm config set '//${env.NPM_REGISTRY}/:_authToken' \$(echo -n ${env.JFROG_USER}:${env.JFROG_API_KEY} | base64)"
+                
+                // Publish package to JFrog
+                bat 'npm publish'
             }
         }
     }
