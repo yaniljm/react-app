@@ -8,7 +8,7 @@ pipeline {
     NPMRC_CONTENTS = "registry=$https://acndevops.jfrog.io/artifactory/api/npm/devops-local\n_auth=$devops:$ACNDevops.fy23\nemail=devops@gmail.com"
   }
   
-  Stages{
+  Stages {
     stage("SCM") {
         git 'https://github.com/yaniljm/react-app.git'
         bat 'npm install'
