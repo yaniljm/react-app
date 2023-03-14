@@ -22,4 +22,5 @@ pipeline {
             bat 'jfrog rt npm-publish --npm-auth .npmrc --build-name my-package --build-number 1.0.0 .tgz'
         }
     }
+    }
 }
