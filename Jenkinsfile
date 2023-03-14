@@ -3,12 +3,12 @@ node {
     git 'https://github.com/yaniljm/react-app.git'
     bat 'npm install'
             }
-  stage('Build') {
+    stage('Build') {
     steps {
     bat 'npm run build'
     bat 'npm install -g serve'
             }
-  stage('Publish') {
+        stage('Publish') {
             steps {
                 script {
                     def server = Artifactory.server 'artifactory-server'
