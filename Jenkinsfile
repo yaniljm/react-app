@@ -3,7 +3,12 @@ node {
     def rtNpm = Artifactory.newNpmBuild()
     def buildInfo = Artifactory.newBuildInfo()
     
-    stage 'SCM'
+    environment
+        ARTIFACTORY_URL = 'https://acndevops.jfrog.io/'
+        ARTIFACTORY_NPM_REPO = 'devops-local'
+        ARTIFACTORY_NPM_SCOPE = '@devops'
+    
+   stage 'SCM'
         git 'https://github.com/yaniljm/react-app.git'
         
     stage 'Install dependencies'
@@ -13,16 +18,10 @@ node {
         bat 'npm run build'
         
     stage 'Publish'
-        steps {
-            script {
-                def buildInfo = rtBuildInfo()
-                    
-                rtNpmSetRegistry(registry: "${https://acndevops.jfrog.io}/${devops-local}")
-                rtNpmAuth(authParams: [username: "${devops", password: "$cmVmdGtuOjAxOjE3MTAyOTc3NjY6TFR0Snp2YXloaW9uOU8zTlh2Z0tGbGRJV2pk", email: 'devops@gmail.com'])
-                bat "npm publish ${devops} --registry=${https://acndevops.jfrog.io}/${devops-local}"
-                    
-                buildInfo.appendBuildInfo(env.JOB_NAME, env.BUILD_NUMBER, env.GIT_COMMIT, 'npm')
-                rtPublishBuildInfo serverId: 'Artifactory', buildInfo: buildInfo
-                }
-            }
-        }
+        def buildInfo = rtBuildInfo()
+       // rtNpmSetRegistry(registry: "${https://acndevops.jfrog.io}/${devops-local}")
+       // rtNpmAuth(authParams: [username: "${devops", password: "$cmVmdGtuOjAxOjE3MTAyOTc3NjY6TFR0Snp2YXloaW9uOU8zTlh2Z0tGbGRJV2pk", email: 'devops@gmail.com'])
+        bat "npm publish ${devops} --registry=${https://acndevops.jfrog.io}/${devops-local}"
+        buildInfo.appendBuildInfo(env.JOB_NAME, env.BUILD_NUMBER, env.GIT_COMMIT, 'npm')
+        rtPublishBuildInfo serverId: 'Artifactory', buildInfo: buildInfo
+}
