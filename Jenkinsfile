@@ -3,7 +3,7 @@ node {
     def rtNpm = Artifactory.newNpmBuild()
     def buildInfo = Artifactory.newBuildInfo()
     stage 'Build'
-        git url: 'https://github.com/yaniljm/devops.git'
+        git url: 'https://github.com/yaniljm/react-app.git'
 
     stage 'Artifactory configuration'
         rtNpm.tool = 'devopsjfrog' // Tool name from Jenkins configuration
