@@ -14,14 +14,9 @@ node {
             buildInfo.env.capture = true
             buildInfo.env.filter.addInclude("*")
         }
+        stage('Install dependencies') {
+            steps {
+                bat 'npm install'
+            }
 
-        stage('Extra Npm Configurations') {
-            rtNpm.usesPlugin = true // Artifactory plugin already defined in build script
-        }
-        stage('Exec Npm') {
-            rtNpm.run rootDir: "artifactory/", buildFile: 'build.Npm', tasks: 'clean artifactoryPublish', buildInfo: buildInfo
-        }
-        stage('Publish build info') {
-            server.publishBuildInfo buildInfo
-        }
 }
