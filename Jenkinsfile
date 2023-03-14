@@ -1,7 +1,5 @@
 pipeline {
-  agent {
-      label 'devops'
-  }
+  agent any
   
   environment {
     ARTIFACTORY_URL = "https://acndevops.jfrog.io"
@@ -14,7 +12,7 @@ pipeline {
     stage("SCM") {
       steps {
         git 'https://github.com/yaniljm/react-app.git'
-        bat 'npm install'
+        sh 'npm install'
       }
     }
     stage("Build") {
