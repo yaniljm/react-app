@@ -8,18 +8,24 @@ pipeline {
     NPMRC_CONTENTS = "registry=$https://acndevops.jfrog.io/artifactory/api/npm/devops-local\n_auth=$devops:$ACNDevops.fy23\nemail=devops@gmail.com"
   }
   
-  Stages {
+  stages {
     stage("SCM") {
+      steps {
         git 'https://github.com/yaniljm/react-app.git'
         bat 'npm install'
+      }
     }
     stage("Build") {
+      steps {
         bat 'npm run build'
         bat 'npm install -g serve'
+      }
     } 
     stage("Publish") {
-      bat 'npm pack'
-      bat 'jfrog rt npm-publish --npm-auth .npmrc --build-name my-package --build-number 1.0.0 .tgz'
+      steps {
+        bat 'npm pack'
+        bat 'jfrog rt npm-publish --npm-auth .npmrc --build-name my-package --build-number 1.0.0 .tgz'
+      }
     }
   }
 }
