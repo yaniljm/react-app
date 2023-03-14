@@ -1,5 +1,5 @@
 node {
-    environment {
+    //environment {
         ARTIFACTORY_URL = 'https://acndevops.jfrog.io/'
         ARTIFACTORY_NPM_REPO = 'devops-local'
         ARTIFACTORY_NPM_SCOPE = '@devops'
