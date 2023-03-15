@@ -1,7 +1,8 @@
 {
   "name": "simple-reactjs-app",
   "version": "0.1.0",
-  "publishConfig":{"registry":"https://acndevops.jfrog.io/artifactory/api/npm/devops-local/"} 
+  "publishConfig":{"registry":"https://acndevops.jfrog.io/artifactory/api/npm/devops-local/"},
+  "public": true,
   "homepage": "https://aditya-sridhar.github.io/simple-reactjs-app",
   "dependencies": {
     "axios": "^0.18.0",
